@@ -44,8 +44,8 @@ struct ContentView: View {
     private func content(_ currencies: [Currency]) -> some View {
         ScrollView {
             LazyVStack(content: {
-                ForEach(currencies, id: \.self) { item in
-                    Text(item.symbol)
+                ForEach(Array(currencies.enumerated()), id: \.offset) { index, item in
+                    CurrencyListCell(currency: item, darkCell: index % 2 == 0)
                 }
             })
         }
