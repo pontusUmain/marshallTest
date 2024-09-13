@@ -8,16 +8,50 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @StateObject var viewModel = ViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            switch viewModel.viewState {
+            case .loadingState:
+                loadingState()
+            case .contentState(let currencies):
+                content(currencies)
+            case .emptyState:
+                emptyState()
+            case .errorState:
+                errorState()
+            }
         }
-        .padding()
+        .task {
+            await viewModel.getCurrencies()
+        }
+    }
+    
+    private func emptyState() -> some View {
+        Text("Nothing to see here :(")
+    }
+    
+    private func loadingState() -> some View {
+        Text("Almost there...")
+    }
+    
+    private func errorState() -> some View {
+        Text("Oh no something weird happened! D:")
+    }
+    
+    private func content(_ currencies: [Currency]) -> some View {
+        ScrollView {
+            LazyVStack(content: {
+                ForEach(currencies, id: \.self) { item in
+                    Text(item.symbol)
+                }
+            })
+        }
     }
 }
+
 
 #Preview {
     ContentView()
