@@ -15,6 +15,7 @@ class ViewModel: ObservableObject {
     private let url = "https://api.wazirx.com/sapi/v1/tickers/24hr"
     
     @Published var viewState: ViewState = .loadingState
+    @Published var exchange: Exchange = .usd
     
     @MainActor
     func getCurrencies() async {
@@ -26,6 +27,14 @@ class ViewModel: ObservableObject {
             viewState = .errorState
         }
     }
+    
+    func switchExchange() {
+        if exchange == .usd {
+            exchange = .sek
+        } else {
+            exchange = .usd
+        }
+    }
 }
 
 extension ViewModel {
@@ -34,5 +43,37 @@ extension ViewModel {
         case contentState(currencies: [Currency])
         case emptyState
         case errorState
+    }
+}
+
+enum Exchange {
+    case usd
+    case sek
+    
+    var flag: String {
+        switch self {
+        case .usd:
+            "$"
+        case .sek:
+            "SEK"
+        }
+    }
+    
+    var oppositeFlag: String {
+        switch self {
+        case .usd:
+            "SEK"
+        case .sek:
+            "$"
+        }
+    }
+    
+    var buttonColor: Color {
+        switch self {
+        case .usd:
+                .yellow
+        case .sek:
+                .red
+        }
     }
 }

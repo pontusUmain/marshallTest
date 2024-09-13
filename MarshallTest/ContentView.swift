@@ -17,7 +17,7 @@ struct ContentView: View {
             case .loadingState:
                 loadingState()
             case .contentState(let currencies):
-                content(currencies)
+                content(currencies: currencies)
             case .emptyState:
                 emptyState()
             case .errorState:
@@ -41,11 +41,24 @@ struct ContentView: View {
         Text("Oh no something weird happened! D:")
     }
     
-    private func content(_ currencies: [Currency]) -> some View {
-        ScrollView {
-            LazyVStack(content: {
-                ForEach(Array(currencies.enumerated()), id: \.offset) { index, item in
-                    CurrencyListCell(currency: item, darkCell: index % 2 == 0)
+    private func content(currencies: [Currency]) -> some View {
+        NavigationStack {
+            ScrollView {
+                LazyVStack(content: {
+                    ForEach(Array(currencies.enumerated()), id: \.offset) { index, item in
+                        CurrencyListCell(currency: item, darkCell: index % 2 == 0, exchange: viewModel.exchange)
+                    }
+                })
+            }
+            .navigationTitle("Title")
+            .toolbar(content: {
+                Button(action: {
+                    viewModel.switchExchange()
+                }) {
+                    Text(viewModel.exchange.oppositeFlag)
+                        .padding()
+                        .background(viewModel.exchange.buttonColor)
+                        .clipShape(Circle())
                 }
             })
         }
