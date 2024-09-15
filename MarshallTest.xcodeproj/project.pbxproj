@@ -18,6 +18,7 @@
 		9187B51C2C947085004A4601 /* cryptocurrencies.json in Resources */ = {isa = PBXBuildFile; fileRef = 9187B51B2C947085004A4601 /* cryptocurrencies.json */; };
 		9187B51F2C949434004A4601 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187B51E2C949434004A4601 /* TabBarView.swift */; };
 		9187B5212C9732A9004A4601 /* ExchangeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187B5202C9732A9004A4601 /* ExchangeResult.swift */; };
+		9187B5232C973C59004A4601 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187B5222C973C59004A4601 /* Currency.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		9187B51B2C947085004A4601 /* cryptocurrencies.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cryptocurrencies.json; sourceTree = "<group>"; };
 		9187B51E2C949434004A4601 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		9187B5202C9732A9004A4601 /* ExchangeResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeResult.swift; sourceTree = "<group>"; };
+		9187B5222C973C59004A4601 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 			children = (
 				9187B5132C943EDE004A4601 /* CryptoCurrency.swift */,
 				9187B5202C9732A9004A4601 /* ExchangeResult.swift */,
+				9187B5222C973C59004A4601 /* Currency.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -191,6 +194,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9187B5232C973C59004A4601 /* Currency.swift in Sources */,
 				9187B5172C945DCE004A4601 /* ViewModel.swift in Sources */,
 				9187B5212C9732A9004A4601 /* ExchangeResult.swift in Sources */,
 				9187B5142C943EDE004A4601 /* CryptoCurrency.swift in Sources */,
