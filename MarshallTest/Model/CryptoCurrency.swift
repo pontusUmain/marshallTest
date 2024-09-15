@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Currency: Codable, Hashable {
+struct CryptoCurrency: Codable, Hashable {
     let symbol: String
     let baseAsset: String
     let quoteAsset: String
@@ -21,9 +21,21 @@ struct Currency: Codable, Hashable {
     let at: Int
 }
 
-extension Currency {
-    func getCurrencyName() -> String? {
-        loadNameJson(key: self.baseAsset)
+extension CryptoCurrency {
+    var getName: String {
+        if let name = loadNameJson(key: self.baseAsset) {
+            return name
+        } else {
+            return ""
+        }
+    }
+    
+    func getPrice(rate: Double) -> String {
+        guard let price = Double(lastPrice) else {
+            return ""
+        }
+        
+        return "\(price * rate)"
     }
     
     func loadNameJson(key: String) -> String? {

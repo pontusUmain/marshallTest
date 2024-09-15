@@ -15,7 +15,7 @@ struct ContentView: View {
         Group {
             switch viewModel.viewState {
             case .loadingState:
-                loadingState()
+                content(currencies: [])
             case .contentState(let currencies):
                 content(currencies: currencies)
             case .emptyState:
@@ -26,39 +26,58 @@ struct ContentView: View {
         }
         .task {
             await viewModel.getCurrencies()
+            await viewModel.getExchangeRate()
         }
     }
     
     private func emptyState() -> some View {
-        Text("Nothing to see here :(")
-    }
-    
-    private func loadingState() -> some View {
-        Text("Almost there...")
+        Text("Nothing to see here :( No cryptos found")
     }
     
     private func errorState() -> some View {
-        Text("Oh no something weird happened! D:")
+        VStack {
+            Text("Oh no something weird happened! D:")
+        
+            Button(action: {
+                Task {
+                    await viewModel.reload()
+                }
+            }) {
+                Text("Reload")
+                    .padding()
+                    .background(.blue)
+                    .foregroundColor(.white)
+                
+            }
+        }
+        
     }
     
-    private func content(currencies: [Currency]) -> some View {
+    private func content(currencies: [CryptoCurrency]) -> some View {
         NavigationStack {
             ScrollView {
-                LazyVStack(content: {
-                    ForEach(Array(currencies.enumerated()), id: \.offset) { index, item in
-                        CurrencyListCell(currency: item, darkCell: index % 2 == 0, exchange: viewModel.exchange)
+                LazyVStack(spacing: 0) {
+                    if currencies.isEmpty {
+                        ForEach(0...20, id: \.self) { index in
+                            CryptoCurrencyListCell(style: .placeholder(darkCell: index % 2 == 0))
+                        }
+                    } else {
+                        ForEach(Array(currencies.enumerated()), id: \.offset) { index, item in
+                            NavigationLink(destination: Text("Hello")) {
+                                CryptoCurrencyListCell(style: .content(currency: item, darkCell: index % 2 == 0, exchange: viewModel.exchange[viewModel.currentExchangeIndex]))
+                            }
+                        }
                     }
-                })
+                }
             }
             .navigationTitle("Title")
             .toolbar(content: {
-                Button(action: {
-                    viewModel.switchExchange()
-                }) {
-                    Text(viewModel.exchange.oppositeFlag)
-                        .padding()
-                        .background(viewModel.exchange.buttonColor)
-                        .clipShape(Circle())
+                if viewModel.exchange.count > 0 {
+                    Button(action: {
+                        viewModel.switchCurrency()
+                    }) {
+                        Text("Switch")
+                    }
                 }
             })
         }
@@ -67,5 +86,5 @@ struct ContentView: View {
 
 
 #Preview {
-    ContentView()
+    ContentView(viewModel: ViewModel())
 }

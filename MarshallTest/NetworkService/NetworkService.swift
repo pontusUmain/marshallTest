@@ -10,9 +10,11 @@ import Combine
 
 final class NetworkService {
     private var subscriptions = Set<AnyCancellable>()
+    
+    private let decoder = JSONDecoder()
 
     // MARK: Combine
-    private func fetchFromUrl(url: String) -> AnyPublisher<[Currency], Never> {
+    private func fetchFromUrl(url: String) -> AnyPublisher<[CryptoCurrency], Never> {
         guard let url = URL(string: url) else {
             return Just([])
                 .eraseToAnyPublisher()
@@ -21,7 +23,7 @@ final class NetworkService {
             .shared
             .dataTaskPublisher(for: url)
             .map { $0.data }
-            .decode(type: [Currency].self, decoder: JSONDecoder())
+            .decode(type: [CryptoCurrency].self, decoder: decoder)
             .catch { _ in return Just([]) }
             .eraseToAnyPublisher()
         
@@ -42,19 +44,34 @@ final class NetworkService {
     }
         
     // MARK: AsyncAwait
-    private func fetchFromUrl(url: String) async throws -> [Currency] {
-        guard let url = URL(string: url) else {
+    
+    private func load<T: Decodable>(endpoint: Endpoint) async throws -> T {
+        guard let url = endpoint.url else {
             throw NetworkError.invalidUrl
         }
-        let (data, _) = try await URLSession.shared.data(from: url)
-        return try JSONDecoder().decode([Currency].self, from: data)
+        let (data, response) = try await URLSession.shared.data(from: url)
+        if (response as! HTTPURLResponse).statusCode != 200 {
+            throw NetworkError.fetchFailed
+        }
+        return try decoder.decode(T.self, from: data)
     }
     
-    func getCurrenciesWithAsync(url: String) async throws -> [Currency] {
+    func loadCurrencies() async throws -> [CryptoCurrency] {
         do {
-            return try await fetchFromUrl(url: url)
-        } catch let error {
-            print("Async error")
+            let currencyResponse: [CryptoCurrency] = try await load(endpoint: .cryptoApi)
+            return currencyResponse
+        } catch {
+            print(error.localizedDescription)
+            throw NetworkError.fetchFailed
+        }
+    }
+    
+    func loadExchangeRate() async throws -> Double? {
+        do {
+            let exchangeRateResponse: ExchangeResult = try await load(endpoint: .exchangeApi)
+            let sekExchangeRate = exchangeRateResponse.getExchangeRate(for: "sek")
+            return sekExchangeRate
+        } catch {
             print(error.localizedDescription)
             throw NetworkError.fetchFailed
         }
@@ -65,5 +82,19 @@ extension NetworkService {
     enum NetworkError: Error {
         case fetchFailed
         case invalidUrl
+    }
+}
+
+enum Endpoint {
+    case cryptoApi
+    case exchangeApi
+    
+    var url: URL? {
+        switch self {
+        case .cryptoApi:
+            return URL(string: "https://api.wazirx.com/sapi/v1/tickers/24hr")
+        case .exchangeApi:
+            return URL(string: "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json")
+        }
     }
 }
