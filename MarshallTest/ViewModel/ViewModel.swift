@@ -12,35 +12,39 @@ class ViewModel: ObservableObject {
     
     // Network service
     private let networkService = NetworkService()
-    private let url = "https://api.wazirx.com/sapi/v1/tickers/24hr"
     
     @Published var viewState: ViewState = .loadingState
     @Published var exchange: [CurrentCurrency] = [.init(currency: .usd, exchangeRate: 1)]
     @Published var currentExchangeIndex: Int = 0
     
+    // Get
+    
     @MainActor
-    func getCurrencies() async {
+    func getCryptoCurrencies() async {
         do {
             let currencyResponse = try await networkService.loadCurrencies()
             if currencyResponse.isEmpty {
-                viewState = .emptyState
+                viewState = .emptyState(message: Constants.Strings.emptyMessage)
                 return
             }
             
-            let currencyNameResponse = networkService.loadCryptoNamesFromJson()
-            let models: [CryptoCurrencyModel?] = currencyResponse.map { response in
-                let currencyName = currencyNameResponse.first(where: { $0.key.lowercased() == response.baseAsset.lowercased() })?.value ?? "?"
-                return response.makeModel(name: currencyName)
-            }
-            
-            let noNilModels = models.compactMap { $0 }
-            
-            viewState = noNilModels.isEmpty ? .emptyState : .contentState(models: noNilModels)
+            let models = loadCurrencyModels(currencyResponse: currencyResponse)
+            viewState = models.isEmpty ? .emptyState(message: Constants.Strings.emptyMessage) : .contentState(models: models)
             
         } catch let error {
             print(error)
-            viewState = .errorState
+            viewState = .emptyState(message: Constants.Strings.errorMessage)
         }
+    }
+    
+    private func loadCurrencyModels(currencyResponse: [CryptoCurrencyResponse]) -> [CryptoCurrencyModel] {
+        let currencyNameResponse = networkService.loadCryptoNamesFromJson()
+        let models: [CryptoCurrencyModel?] = currencyResponse.map { response in
+            let currencyName = currencyNameResponse.first(where: { $0.key.lowercased() == response.baseAsset.lowercased() })?.value ?? "?"
+            return response.makeModel(name: currencyName)
+        }
+        
+        return models.compactMap { $0 }
     }
     
     @MainActor
@@ -69,7 +73,8 @@ class ViewModel: ObservableObject {
     
     @MainActor
     func reload() async {
-        await getCurrencies()
+        await getCryptoCurrencies()
+        await getExchangeRate()
         viewState = .loadingState
     }
 }
@@ -78,8 +83,7 @@ extension ViewModel {
     enum ViewState {
         case loadingState
         case contentState(models: [CryptoCurrencyModel])
-        case emptyState
-        case errorState
+        case emptyState(message: String)
     }
 }
 

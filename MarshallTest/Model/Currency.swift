@@ -25,27 +25,27 @@ enum Currency {
     var flag: String {
         switch self {
         case .usd:
-            "$"
+            "🇺🇸"
         case .sek:
-            "SEK"
+            "🇸🇪"
         }
     }
     
     var oppositeFlag: String {
         switch self {
         case .usd:
-            "SEK"
+            "🇸🇪"
         case .sek:
-            "$"
+            "🇺🇸"
         }
     }
     
-    var buttonColor: Color {
+    var symbol: String {
         switch self {
         case .usd:
-                .yellow
+            "$"
         case .sek:
-                .red
+            "SEK"
         }
     }
 }

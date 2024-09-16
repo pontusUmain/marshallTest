@@ -9,6 +9,7 @@ import Foundation
 
 struct Constants {  
     struct Strings {
+        // Crypto model
         static let symbol = "Symbol"
         static let baseAsset = "Base asset"
         static let quoteAsset = "Quote asset"
@@ -20,6 +21,14 @@ struct Constants {
         static let bidPrice = "Bid price"
         static let askPrice = "Ask price"
         static let at = "At"
+        
+        // States
+        static let errorMessage = "Oh no something weird happened! D:"
+        static let emptyMessage = "Nothing to see here :( No cryptos found"
+        
+        // Buttons
+        static let reloadButton = "Reload"
+        static let switchButton = "Switch to"
     }
     
     struct Urls {

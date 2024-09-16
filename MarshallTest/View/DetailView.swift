@@ -59,7 +59,7 @@ struct DetailView: View {
             Text("\(name):")
                 .bold()
             Spacer()
-            Text(" \(currentCurrency.currency.flag)\(price)")
+            Text(" \(currentCurrency.currency.symbol)\(price)")
         }
         .padding(.horizontal)
     }

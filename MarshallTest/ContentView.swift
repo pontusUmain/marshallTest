@@ -15,68 +15,62 @@ struct ContentView: View {
         Group {
             switch viewModel.viewState {
             case .loadingState:
-                content(currencies: [])
+                content(models: [])
             case .contentState(let currencies):
-                content(currencies: currencies)
-            case .emptyState:
-                emptyState()
-            case .errorState:
-                errorState()
+                content(models: currencies)
+            case .emptyState(let message):
+                emptyState(message)
             }
         }
         .task {
-            await viewModel.getCurrencies()
+            await viewModel.getCryptoCurrencies()
             await viewModel.getExchangeRate()
         }
     }
     
-    private func emptyState() -> some View {
-        Text("Nothing to see here :( No cryptos found")
-    }
-    
-    private func errorState() -> some View {
+    private func emptyState(_ message: String) -> some View {
         VStack {
-            Text("Oh no something weird happened! D:")
+            Text(message)
         
             Button(action: {
                 Task {
                     await viewModel.reload()
                 }
             }) {
-                Text("Reload")
+                Text(Constants.Strings.reloadButton)
                     .padding()
                     .background(.blue)
                     .foregroundColor(.white)
                 
             }
         }
-        
     }
     
-    private func content(currencies: [CryptoCurrencyModel]) -> some View {
-        NavigationStack {
+    private func content(models: [CryptoCurrencyModel]) -> some View {
+        let currentCurrency = viewModel.exchange[viewModel.currentExchangeIndex]
+        
+        return NavigationStack {
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    if currencies.isEmpty {
+                    if models.isEmpty {
                         ForEach(0...20, id: \.self) { index in
                             CryptoCurrencyListCell(style: .placeholder(darkCell: index % 2 == 0))
                         }
                     } else {
-                        ForEach(Array(currencies.enumerated()), id: \.offset) { index, item in
-                            NavigationLink(destination: DetailView(model: item, currentCurrency: viewModel.exchange[viewModel.currentExchangeIndex])) {
-                                CryptoCurrencyListCell(style: .content(model: item, darkCell: index % 2 == 0, exchange: viewModel.exchange[viewModel.currentExchangeIndex]))
+                        ForEach(Array(models.enumerated()), id: \.offset) { index, item in
+                            NavigationLink(destination: DetailView(model: item, currentCurrency: currentCurrency)) {
+                                CryptoCurrencyListCell(style: .content(model: item, darkCell: index % 2 == 0, exchange: currentCurrency))
                             }
                         }
                     }
                 }
             }
-            .navigationTitle("Title")
             .toolbar(content: {
                 if viewModel.exchange.count > 0 {
                     Button(action: {
                         viewModel.switchCurrency()
                     }) {
-                        Text("Switch")
+                        Text("\(Constants.Strings.switchButton) \( currentCurrency.currency.oppositeFlag)")
                     }
                 }
             })

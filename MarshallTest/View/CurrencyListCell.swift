@@ -38,7 +38,7 @@ struct CryptoCurrencyListCell: View {
                 cellContent(currencyName: "Placeholder", price: "SEK 123", redacted: true)
             case .content(let model, _, let exchange):
                 let price = String(format: Constants.Format.twoDecimalFormat, model.lastPrice * exchange.exchangeRate)
-                cellContent(currencyName: model.name, price: "\(exchange.currency.flag)\(price)")
+                cellContent(currencyName: model.name, price: "\(exchange.currency.symbol)\(price)")
             }
         }
         .foregroundStyle(.foreground)
