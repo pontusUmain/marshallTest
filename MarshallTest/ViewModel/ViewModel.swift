@@ -21,8 +21,22 @@ class ViewModel: ObservableObject {
     @MainActor
     func getCurrencies() async {
         do {
-            let currencies = try await networkService.loadCurrencies()
-            viewState = currencies.isEmpty ? .emptyState : .contentState(currencies: currencies)
+            let currencyResponse = try await networkService.loadCurrencies()
+            if currencyResponse.isEmpty {
+                viewState = .emptyState
+                return
+            }
+            
+            let currencyNameResponse = networkService.loadCryptoNamesFromJson()
+            let models: [CryptoCurrencyModel?] = currencyResponse.map { response in
+                let currencyName = currencyNameResponse.first(where: { $0.key.lowercased() == response.baseAsset.lowercased() })?.value ?? "?"
+                return response.makeModel(name: currencyName)
+            }
+            
+            let noNilModels = models.compactMap { $0 }
+            
+            viewState = noNilModels.isEmpty ? .emptyState : .contentState(models: noNilModels)
+            
         } catch let error {
             print(error)
             viewState = .errorState
@@ -63,7 +77,7 @@ class ViewModel: ObservableObject {
 extension ViewModel {
     enum ViewState {
         case loadingState
-        case contentState(currencies: [CryptoCurrency])
+        case contentState(models: [CryptoCurrencyModel])
         case emptyState
         case errorState
     }

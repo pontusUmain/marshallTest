@@ -7,6 +7,59 @@
 
 import Foundation
 
+struct CryptoCurrencyResponse: Codable {
+    let symbol: String
+    let baseAsset: String
+    let quoteAsset: String
+    let openPrice: String
+    let lowPrice: String
+    let highPrice: String
+    let lastPrice: String
+    let volume: String
+    let bidPrice: String
+    let askPrice: String
+    let at: Int
+    
+    func makeModel(name: String) -> CryptoCurrencyModel? {
+        guard let openPrice = Double(self.openPrice),
+              let lowPrice = Double(self.lowPrice),
+              let highPrice = Double(self.highPrice),
+              let lastPrice = Double(self.lastPrice),
+              let bidPrice = Double(self.bidPrice),
+              let askPrice = Double(self.askPrice) else {
+            return nil
+        }
+        return CryptoCurrencyModel(
+            symbol: self.symbol,
+            baseAsset: self.baseAsset,
+            quoteAsset: self.quoteAsset,
+            openPrice: openPrice,
+            lowPrice: lowPrice,
+            highPrice: highPrice,
+            lastPrice: lastPrice,
+            volume: self.volume,
+            bidPrice: bidPrice,
+            askPrice: askPrice,
+            at: self.at,
+            name: name)
+    }
+}
+
+struct CryptoCurrencyModel: Hashable {
+    let symbol: String
+    let baseAsset: String
+    let quoteAsset: String
+    let openPrice: Double
+    let lowPrice: Double
+    let highPrice: Double
+    let lastPrice: Double
+    let volume: String
+    let bidPrice: Double
+    let askPrice: Double
+    let at: Int
+    let name: String
+}
+
 struct CryptoCurrency: Codable, Hashable {
     let symbol: String
     let baseAsset: String

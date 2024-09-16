@@ -53,7 +53,7 @@ struct ContentView: View {
         
     }
     
-    private func content(currencies: [CryptoCurrency]) -> some View {
+    private func content(currencies: [CryptoCurrencyModel]) -> some View {
         NavigationStack {
             ScrollView {
                 LazyVStack(spacing: 0) {
@@ -63,8 +63,8 @@ struct ContentView: View {
                         }
                     } else {
                         ForEach(Array(currencies.enumerated()), id: \.offset) { index, item in
-                            NavigationLink(destination: Text("Hello")) {
-                                CryptoCurrencyListCell(style: .content(currency: item, darkCell: index % 2 == 0, exchange: viewModel.exchange[viewModel.currentExchangeIndex]))
+                            NavigationLink(destination: DetailView(model: item, currentCurrency: viewModel.exchange[viewModel.currentExchangeIndex])) {
+                                CryptoCurrencyListCell(style: .content(model: item, darkCell: index % 2 == 0, exchange: viewModel.exchange[viewModel.currentExchangeIndex]))
                             }
                         }
                     }

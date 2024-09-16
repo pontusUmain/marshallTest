@@ -56,9 +56,9 @@ final class NetworkService {
         return try decoder.decode(T.self, from: data)
     }
     
-    func loadCurrencies() async throws -> [CryptoCurrency] {
+    func loadCurrencies() async throws -> [CryptoCurrencyResponse] {
         do {
-            let currencyResponse: [CryptoCurrency] = try await load(endpoint: .cryptoApi)
+            let currencyResponse: [CryptoCurrencyResponse] = try await load(endpoint: .cryptoApi)
             return currencyResponse
         } catch {
             print(error.localizedDescription)
@@ -76,25 +76,33 @@ final class NetworkService {
             throw NetworkError.fetchFailed
         }
     }
-}
-
-extension NetworkService {
-    enum NetworkError: Error {
-        case fetchFailed
-        case invalidUrl
-    }
-}
-
-enum Endpoint {
-    case cryptoApi
-    case exchangeApi
     
-    var url: URL? {
-        switch self {
-        case .cryptoApi:
-            return URL(string: "https://api.wazirx.com/sapi/v1/tickers/24hr")
-        case .exchangeApi:
-            return URL(string: "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json")
+    // MARK: JSON
+    
+    private func loadJson<T: Decodable>(resource: String) -> T? {
+        if let url = Bundle.main.url(forResource: resource, withExtension: "json") {
+            do {
+                let data = try Data(contentsOf: url)
+                let decoder = JSONDecoder()
+                let jsonData = try decoder.decode(T.self, from: data)
+                
+                return jsonData
+            
+//                guard let first = jsonData.first(where: { $0.key.lowercased() == key }) else {
+//                    return nil
+//                }
+//                
+//                return first.value
+            } catch {
+                print("error:\(error)")
+                return nil
+            }
         }
+        return nil
+    }
+    
+    func loadCryptoNamesFromJson() -> [String: String] {
+        let cryptoNameResponse: [String: String]? = loadJson(resource: Constants.Urls.cryptoNameJson)
+        return cryptoNameResponse ?? [:]
     }
 }
