@@ -60,6 +60,10 @@ struct CryptoCurrencyModel: Hashable {
     let name: String
 }
 
+extension CryptoCurrencyModel {
+    static let placeholder: CryptoCurrencyModel = .init(symbol: "Mock", baseAsset: "placeholder", quoteAsset: "placeholder", openPrice: 0.0, lowPrice: 0.0, highPrice: 0.0, lastPrice: 0.0, volume: "placeholder", bidPrice: 0.0, askPrice: 0.0, at: 0, name: "placeholder")
+}
+
 struct CryptoCurrency: Codable, Hashable {
     let symbol: String
     let baseAsset: String
@@ -73,43 +77,3 @@ struct CryptoCurrency: Codable, Hashable {
     let askPrice: String
     let at: Int
 }
-
-extension CryptoCurrency {
-    var getName: String {
-        if let name = loadNameJson(key: self.baseAsset) {
-            return name
-        } else {
-            return ""
-        }
-    }
-    
-    func getPrice(rate: Double) -> String {
-        guard let price = Double(lastPrice) else {
-            return ""
-        }
-        
-        return "\(price * rate)"
-    }
-    
-    func loadNameJson(key: String) -> String? {
-        if let url = Bundle.main.url(forResource: "cryptocurrencies", withExtension: "json") {
-            do {
-                let data = try Data(contentsOf: url)
-                let decoder = JSONDecoder()
-                let jsonData = try decoder.decode([String: String].self, from: data)
-            
-                guard let first = jsonData.first(where: { $0.key.lowercased() == key }) else {
-                    return nil
-                }
-                
-                return first.value
-            } catch {
-                print("error:\(error)")
-            }
-        }
-        return nil
-    }
-}
-
-
-

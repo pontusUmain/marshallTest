@@ -66,7 +66,7 @@ struct DetailView: View {
 }
 
 #Preview {
-    let mocky = CryptoCurrencyModel(symbol: "symbol", baseAsset: "dht", quoteAsset: "quoteAsset", openPrice: 10.10, lowPrice: 20.2, highPrice: 33.1, lastPrice: 44.8, volume: "volume", bidPrice: 55, askPrice: 66.555, at: 123, name: "Bitcoin")
+    let mocky = CryptoCurrencyModel.placeholder
     
     return DetailView(model: mocky, currentCurrency: .init(currency: .usd, exchangeRate: 1))
 }

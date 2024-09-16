@@ -59,12 +59,10 @@ struct CryptoCurrencyListCell: View {
 }
 
 #Preview {
-    let placeHolder = CryptoCurrencyModel(symbol: "symbol", baseAsset: "btc", quoteAsset: "quoteAsset", openPrice: 11, lowPrice: 12, highPrice: 13, lastPrice: 14, volume: "volume", bidPrice: 15, askPrice: 16, at: 10, name: "Placeholder")
-    let mock = CryptoCurrencyModel(symbol: "symbol", baseAsset: "btc", quoteAsset: "quoteAsset", openPrice: 11, lowPrice: 12, highPrice: 13, lastPrice: 14, volume: "volume", bidPrice: 15, askPrice: 16, at: 10, name: "Mock")
-    
+    let placeHolder = CryptoCurrencyModel.placeholder
     
     return VStack(spacing: 0) {
         CryptoCurrencyListCell(style: .placeholder(darkCell: true))
-        CryptoCurrencyListCell(style: .content(model: mock, darkCell: false, exchange: .init(currency: .usd, exchangeRate: 1)))
+        CryptoCurrencyListCell(style: .content(model: placeHolder, darkCell: false, exchange: .init(currency: .usd, exchangeRate: 1)))
     }
 }

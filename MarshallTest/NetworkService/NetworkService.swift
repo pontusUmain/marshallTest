@@ -12,36 +12,6 @@ final class NetworkService {
     private var subscriptions = Set<AnyCancellable>()
     
     private let decoder = JSONDecoder()
-
-    // MARK: Combine
-    private func fetchFromUrl(url: String) -> AnyPublisher<[CryptoCurrency], Never> {
-        guard let url = URL(string: url) else {
-            return Just([])
-                .eraseToAnyPublisher()
-        }
-         let currencyPublisher = URLSession
-            .shared
-            .dataTaskPublisher(for: url)
-            .map { $0.data }
-            .decode(type: [CryptoCurrency].self, decoder: decoder)
-            .catch { _ in return Just([]) }
-            .eraseToAnyPublisher()
-        
-        return currencyPublisher
-    }
-
-    func getCurrenciesWithCombine(url: String) {
-        fetchFromUrl(url: url)
-            .sink { result in
-                if let first = result.first {
-                    print("Combine: \(first)")
-                } else {
-                    print("Combine: fetch empty")
-                }
-            }
-            .store(in: &subscriptions)
-
-    }
         
     // MARK: AsyncAwait
     
@@ -87,12 +57,6 @@ final class NetworkService {
                 let jsonData = try decoder.decode(T.self, from: data)
                 
                 return jsonData
-            
-//                guard let first = jsonData.first(where: { $0.key.lowercased() == key }) else {
-//                    return nil
-//                }
-//                
-//                return first.value
             } catch {
                 print("error:\(error)")
                 return nil
@@ -104,5 +68,35 @@ final class NetworkService {
     func loadCryptoNamesFromJson() -> [String: String] {
         let cryptoNameResponse: [String: String]? = loadJson(resource: Constants.Urls.cryptoNameJson)
         return cryptoNameResponse ?? [:]
+    }
+    
+    // MARK: Combine - unused
+    private func load(endpoint: Endpoint) -> AnyPublisher<[CryptoCurrency], Never> {
+        guard let url = endpoint.url else {
+            return Just([])
+                .eraseToAnyPublisher()
+        }
+         let currencyPublisher = URLSession
+            .shared
+            .dataTaskPublisher(for: url)
+            .map { $0.data }
+            .decode(type: [CryptoCurrency].self, decoder: decoder)
+            .catch { _ in return Just([]) }
+            .eraseToAnyPublisher()
+        
+        return currencyPublisher
+    }
+
+    func getCurrenciesWithCombine(url: String) {
+        load(endpoint: .cryptoApi)
+            .sink { result in
+                if let first = result.first {
+                    print("Combine: \(first)")
+                } else {
+                    print("Combine: fetch empty")
+                }
+            }
+            .store(in: &subscriptions)
+
     }
 }

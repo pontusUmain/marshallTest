@@ -10,14 +10,11 @@ import SwiftUI
 
 class ViewModel: ObservableObject {
     
-    // Network service
     private let networkService = NetworkService()
     
     @Published var viewState: ViewState = .loadingState
     @Published var exchange: [CurrentCurrency] = [.init(currency: .usd, exchangeRate: 1)]
     @Published var currentExchangeIndex: Int = 0
-    
-    // Get
     
     @MainActor
     func getCryptoCurrencies() async {

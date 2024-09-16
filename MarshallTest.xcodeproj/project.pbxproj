@@ -80,7 +80,6 @@
 				9187B5122C943EC0004A4601 /* Model */,
 				9187B50F2C943E8A004A4601 /* NetworkService */,
 				9187B5012C943E7E004A4601 /* MarshallTestApp.swift */,
-				9187B5032C943E7E004A4601 /* ContentView.swift */,
 				9187B5052C943E80004A4601 /* Assets.xcassets */,
 				9187B5072C943E80004A4601 /* Preview Content */,
 			);
@@ -128,6 +127,7 @@
 			children = (
 				9187B5192C946A05004A4601 /* CurrencyListCell.swift */,
 				9187B5242C9813D4004A4601 /* DetailView.swift */,
+				9187B5032C943E7E004A4601 /* ContentView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
