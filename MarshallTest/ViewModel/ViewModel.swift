@@ -11,7 +11,7 @@ import SwiftUI
 class ViewModel: ObservableObject {
     
     private let networkService = NetworkService()
-    private let userDefaultsManager = UserDefaultsManager()
+    let userDefaultsManager = UserDefaultsManager()
     
     @Published var viewState: ViewState = .loadingState
     @Published var exchange: [CurrentCurrency] = [.init(currency: .usd, exchangeRate: 1)]
@@ -86,14 +86,13 @@ class ViewModel: ObservableObject {
         viewState = .loadingState
     }
     
-    func didChangeFavorite(model: CryptoCurrencyModel, isFavorite: Bool, index: Int) {
+    func didChangeFavorite(model: CryptoCurrencyModel, isFavorite: Bool) {
+        guard let index = models.firstIndex(where: { $0.symbol == model.symbol }) else { return }
         models[index].isFavorite = isFavorite
         viewState = .contentState(models: models)
         userDefaultsManager.updateFavorites(model: model)
         getFavorites()
     }
-    
-    
 }
 
 extension ViewModel {

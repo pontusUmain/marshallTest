@@ -30,6 +30,7 @@ struct Constants {
         static let reloadButton = "Reload"
         static let switchButton = "Switch to"
         static let favoritesButton = "Favorites"
+        static let removeFavoriteButton = "Remove"
     }
     
     struct Urls {
@@ -50,5 +51,6 @@ struct Constants {
         static let markAsFavorite = "Mark as favorite"
         static let removeAsFavorite = "Remove as favorite"
         static let seeFavorites = "See favorites"
+        static let dismiss = "Dismiss"
     }
 }

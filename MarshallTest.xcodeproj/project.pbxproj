@@ -23,6 +23,8 @@
 		9187B52C2C982A80004A4601 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187B52B2C982A80004A4601 /* NetworkError.swift */; };
 		9187B52E2C982A92004A4601 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187B52D2C982A92004A4601 /* Endpoint.swift */; };
 		91BCB0F12C996C9A0058910D /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BCB0F02C996C9A0058910D /* UserDefaultsManager.swift */; };
+		91BCB0F32C9979270058910D /* FavoritesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BCB0F22C9979270058910D /* FavoritesListView.swift */; };
+		91BCB0F52C99793D0058910D /* FavoritesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BCB0F42C99793D0058910D /* FavoritesListCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +45,8 @@
 		9187B52B2C982A80004A4601 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		9187B52D2C982A92004A4601 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		91BCB0F02C996C9A0058910D /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		91BCB0F22C9979270058910D /* FavoritesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesListView.swift; sourceTree = "<group>"; };
+		91BCB0F42C99793D0058910D /* FavoritesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesListCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +135,8 @@
 				9187B5192C946A05004A4601 /* CurrencyListCell.swift */,
 				9187B5242C9813D4004A4601 /* DetailView.swift */,
 				9187B5032C943E7E004A4601 /* ContentView.swift */,
+				91BCB0F22C9979270058910D /* FavoritesListView.swift */,
+				91BCB0F42C99793D0058910D /* FavoritesListCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -227,11 +233,13 @@
 				9187B5172C945DCE004A4601 /* ViewModel.swift in Sources */,
 				91BCB0F12C996C9A0058910D /* UserDefaultsManager.swift in Sources */,
 				9187B52E2C982A92004A4601 /* Endpoint.swift in Sources */,
+				91BCB0F52C99793D0058910D /* FavoritesListCell.swift in Sources */,
 				9187B5212C9732A9004A4601 /* ExchangeResult.swift in Sources */,
 				9187B5252C9813D4004A4601 /* DetailView.swift in Sources */,
 				9187B5142C943EDE004A4601 /* CryptoCurrency.swift in Sources */,
 				9187B5042C943E7E004A4601 /* ContentView.swift in Sources */,
 				9187B5112C943EAA004A4601 /* NetworkService.swift in Sources */,
+				91BCB0F32C9979270058910D /* FavoritesListView.swift in Sources */,
 				9187B52C2C982A80004A4601 /* NetworkError.swift in Sources */,
 				9187B51A2C946A05004A4601 /* CurrencyListCell.swift in Sources */,
 				9187B5022C943E7E004A4601 /* MarshallTestApp.swift in Sources */,

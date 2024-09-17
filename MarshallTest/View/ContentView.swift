@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     
     @StateObject var viewModel = ViewModel()
+    @State var presentFavorites: Bool = false
     
     var body: some View {
         Group {
@@ -17,9 +18,16 @@ struct ContentView: View {
             case .loadingState:
                 content(models: [])
             case .contentState(let currencies):
-                ZStack(alignment: .bottomTrailing) {
-                    content(models: currencies)
-                    favoritesButton()
+                NavigationStack {
+                    ZStack(alignment: .bottomTrailing) {
+                        content(models: currencies)
+                        if !viewModel.favorites.isEmpty {
+                            favoritesButton()
+                        }
+                    }
+                    .sheet(isPresented: $presentFavorites, onDismiss: { viewModel.getFavorites() }) {
+                        FavoritesListView(models: viewModel.favorites, exchange: viewModel.exchange[viewModel.currentExchangeIndex], updateFavorites: { model in viewModel.didChangeFavorite(model: model, isFavorite: !model.isFavorite) })
+                    }
                 }
             case .emptyState(let message):
                 emptyState(message)
@@ -51,7 +59,9 @@ struct ContentView: View {
     }
     
     private func favoritesButton() -> some View {
-        Button(action: {}) {
+        Button(action: {
+            presentFavorites = true
+        }) {
             Image(systemName: "heart.fill")
                 .accessibilityLabel(Constants.Accessibility.seeFavorites)
                 .padding(25)
@@ -64,8 +74,7 @@ struct ContentView: View {
     private func content(models: [CryptoCurrencyModel]) -> some View {
         let currentCurrency = viewModel.exchange[viewModel.currentExchangeIndex]
         
-        return NavigationStack {
-            ScrollView {
+        return ScrollView {
                 LazyVStack(spacing: 0) {
                     if models.isEmpty {
                         ForEach(0...20, id: \.self) { index in
@@ -74,7 +83,7 @@ struct ContentView: View {
                     } else {
                         ForEach(Array(models.enumerated()), id: \.offset) { index, item in
                             NavigationLink(destination: DetailView(model: item, currentCurrency: currentCurrency, didChangeFavorite:
-                                                                    { bool in viewModel.didChangeFavorite(model: item, isFavorite: bool, index: index)
+                                                                    { bool in viewModel.didChangeFavorite(model: item, isFavorite: bool)
                             }
                                                                   )) {
                                 CryptoCurrencyListCell(style: .content(model: item, darkCell: index % 2 == 0, exchange: currentCurrency))
@@ -92,7 +101,6 @@ struct ContentView: View {
                     }
                 }
             }
-        }
     }
 }
 
