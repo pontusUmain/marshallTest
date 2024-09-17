@@ -17,12 +17,16 @@ struct ContentView: View {
             case .loadingState:
                 content(models: [])
             case .contentState(let currencies):
-                content(models: currencies)
+                ZStack(alignment: .bottomTrailing) {
+                    content(models: currencies)
+                    favoritesButton()
+                }
             case .emptyState(let message):
                 emptyState(message)
             }
         }
         .task {
+            viewModel.getFavorites()
             await viewModel.getCryptoCurrencies()
             await viewModel.getExchangeRate()
         }
@@ -46,6 +50,17 @@ struct ContentView: View {
         }
     }
     
+    private func favoritesButton() -> some View {
+        Button(action: {}) {
+            Image(systemName: "heart.fill")
+                .accessibilityLabel(Constants.Accessibility.seeFavorites)
+                .padding(25)
+                .background(.white)
+                .clipShape(Circle())
+        }
+        .padding(20)
+    }
+    
     private func content(models: [CryptoCurrencyModel]) -> some View {
         let currentCurrency = viewModel.exchange[viewModel.currentExchangeIndex]
         
@@ -58,14 +73,17 @@ struct ContentView: View {
                         }
                     } else {
                         ForEach(Array(models.enumerated()), id: \.offset) { index, item in
-                            NavigationLink(destination: DetailView(model: item, currentCurrency: currentCurrency)) {
+                            NavigationLink(destination: DetailView(model: item, currentCurrency: currentCurrency, didChangeFavorite:
+                                                                    { bool in viewModel.didChangeFavorite(model: item, isFavorite: bool, index: index)
+                            }
+                                                                  )) {
                                 CryptoCurrencyListCell(style: .content(model: item, darkCell: index % 2 == 0, exchange: currentCurrency))
                             }
                         }
                     }
                 }
             }
-            .toolbar(content: {
+            .toolbar {
                 if viewModel.exchange.count > 0 {
                     Button(action: {
                         viewModel.switchCurrency()
@@ -73,7 +91,7 @@ struct ContentView: View {
                         Text("\(Constants.Strings.switchButton) \( currentCurrency.currency.oppositeFlag)")
                     }
                 }
-            })
+            }
         }
     }
 }

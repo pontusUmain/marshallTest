@@ -11,10 +11,15 @@ struct DetailView: View {
     
     let model: CryptoCurrencyModel
     let currentCurrency: CurrentCurrency
+    let didChangeFavorite: (Bool) -> Void
     
-    init(model: CryptoCurrencyModel, currentCurrency: CurrentCurrency) {
+    @State var localFavorite: Bool
+    
+    init(model: CryptoCurrencyModel, currentCurrency: CurrentCurrency, didChangeFavorite: @escaping (Bool) -> Void) {
         self.model = model
         self.currentCurrency = currentCurrency
+        self.didChangeFavorite = didChangeFavorite
+        self.localFavorite = model.isFavorite
     }
     
     var body: some View {
@@ -37,8 +42,19 @@ struct DetailView: View {
             detailItem(name: Constants.Strings.at, value: "\(model.at)")
             Spacer()
         }
-        .ignoresSafeArea()
-
+        .toolbar {
+            Button(action: {
+                localFavorite.toggle()
+            }) {
+                Image(systemName: localFavorite ? "heart.fill" : "heart")
+            }
+            .accessibilityLabel(localFavorite ? Constants.Accessibility.removeAsFavorite : Constants.Accessibility.markAsFavorite)
+        }
+        .onDisappear {
+            if localFavorite != model.isFavorite {
+                didChangeFavorite(localFavorite)
+            }
+        }
     }
     
     func detailItem(name: String, value: String) -> some View {
@@ -66,7 +82,7 @@ struct DetailView: View {
 }
 
 #Preview {
-    let mocky = CryptoCurrencyModel.placeholder
-    
-    return DetailView(model: mocky, currentCurrency: .init(currency: .usd, exchangeRate: 1))
+    NavigationStack {
+        DetailView(model: CryptoCurrencyModel.placeholder, currentCurrency: .init(currency: .usd, exchangeRate: 1), didChangeFavorite: { _ in })
+    }
 }

@@ -20,7 +20,7 @@ struct CryptoCurrencyResponse: Codable {
     let askPrice: String
     let at: Int
     
-    func makeModel(name: String) -> CryptoCurrencyModel? {
+    func makeModel(name: String, isFavorite: Bool) -> CryptoCurrencyModel? {
         guard let openPrice = Double(self.openPrice),
               let lowPrice = Double(self.lowPrice),
               let highPrice = Double(self.highPrice),
@@ -41,11 +41,13 @@ struct CryptoCurrencyResponse: Codable {
             bidPrice: bidPrice,
             askPrice: askPrice,
             at: self.at,
-            name: name)
+            name: name,
+            isFavorite: isFavorite
+        )
     }
 }
 
-struct CryptoCurrencyModel: Hashable {
+struct CryptoCurrencyModel: Hashable, Codable {
     let symbol: String
     let baseAsset: String
     let quoteAsset: String
@@ -58,10 +60,11 @@ struct CryptoCurrencyModel: Hashable {
     let askPrice: Double
     let at: Int
     let name: String
+    var isFavorite: Bool
 }
 
 extension CryptoCurrencyModel {
-    static let placeholder: CryptoCurrencyModel = .init(symbol: "Mock", baseAsset: "placeholder", quoteAsset: "placeholder", openPrice: 0.0, lowPrice: 0.0, highPrice: 0.0, lastPrice: 0.0, volume: "placeholder", bidPrice: 0.0, askPrice: 0.0, at: 0, name: "placeholder")
+    static let placeholder: CryptoCurrencyModel = .init(symbol: "Mock", baseAsset: "placeholder", quoteAsset: "placeholder", openPrice: 0.0, lowPrice: 0.0, highPrice: 0.0, lastPrice: 0.0, volume: "placeholder", bidPrice: 0.0, askPrice: 0.0, at: 0, name: "placeholder", isFavorite: true)
 }
 
 struct CryptoCurrency: Codable, Hashable {

@@ -22,6 +22,7 @@
 		9187B5282C9814FF004A4601 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187B5272C9814FF004A4601 /* Constants.swift */; };
 		9187B52C2C982A80004A4601 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187B52B2C982A80004A4601 /* NetworkError.swift */; };
 		9187B52E2C982A92004A4601 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9187B52D2C982A92004A4601 /* Endpoint.swift */; };
+		91BCB0F12C996C9A0058910D /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BCB0F02C996C9A0058910D /* UserDefaultsManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		9187B5272C9814FF004A4601 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9187B52B2C982A80004A4601 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		9187B52D2C982A92004A4601 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		91BCB0F02C996C9A0058910D /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 		9187B5002C943E7E004A4601 /* MarshallTest */ = {
 			isa = PBXGroup;
 			children = (
+				91BCB0EF2C996C8D0058910D /* UserDefaults */,
 				9187B5262C9814F2004A4601 /* Constants */,
 				9187B51B2C947085004A4601 /* cryptocurrencies.json */,
 				9187B5182C9469F3004A4601 /* View */,
@@ -138,6 +141,14 @@
 				9187B5272C9814FF004A4601 /* Constants.swift */,
 			);
 			path = Constants;
+			sourceTree = "<group>";
+		};
+		91BCB0EF2C996C8D0058910D /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				91BCB0F02C996C9A0058910D /* UserDefaultsManager.swift */,
+			);
+			path = UserDefaults;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,6 +225,7 @@
 				9187B5232C973C59004A4601 /* Currency.swift in Sources */,
 				9187B5282C9814FF004A4601 /* Constants.swift in Sources */,
 				9187B5172C945DCE004A4601 /* ViewModel.swift in Sources */,
+				91BCB0F12C996C9A0058910D /* UserDefaultsManager.swift in Sources */,
 				9187B52E2C982A92004A4601 /* Endpoint.swift in Sources */,
 				9187B5212C9732A9004A4601 /* ExchangeResult.swift in Sources */,
 				9187B5252C9813D4004A4601 /* DetailView.swift in Sources */,

@@ -29,6 +29,7 @@ struct Constants {
         // Buttons
         static let reloadButton = "Reload"
         static let switchButton = "Switch to"
+        static let favoritesButton = "Favorites"
     }
     
     struct Urls {
@@ -39,5 +40,15 @@ struct Constants {
     
     struct Format {
         static let twoDecimalFormat = "%.2f"
+    }
+    
+    struct UserDefaults {
+        static let favorites = "favorites"
+    }
+    
+    struct Accessibility {
+        static let markAsFavorite = "Mark as favorite"
+        static let removeAsFavorite = "Remove as favorite"
+        static let seeFavorites = "See favorites"
     }
 }

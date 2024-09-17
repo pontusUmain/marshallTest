@@ -11,10 +11,13 @@ import SwiftUI
 class ViewModel: ObservableObject {
     
     private let networkService = NetworkService()
+    private let userDefaultsManager = UserDefaultsManager()
     
     @Published var viewState: ViewState = .loadingState
     @Published var exchange: [CurrentCurrency] = [.init(currency: .usd, exchangeRate: 1)]
     @Published var currentExchangeIndex: Int = 0
+    @Published var models = [CryptoCurrencyModel]()
+    @Published var favorites = [CryptoCurrencyModel]()
     
     @MainActor
     func getCryptoCurrencies() async {
@@ -25,7 +28,7 @@ class ViewModel: ObservableObject {
                 return
             }
             
-            let models = loadCurrencyModels(currencyResponse: currencyResponse)
+            models = loadCurrencyModels(currencyResponse: currencyResponse)
             viewState = models.isEmpty ? .emptyState(message: Constants.Strings.emptyMessage) : .contentState(models: models)
             
         } catch let error {
@@ -38,10 +41,18 @@ class ViewModel: ObservableObject {
         let currencyNameResponse = networkService.loadCryptoNamesFromJson()
         let models: [CryptoCurrencyModel?] = currencyResponse.map { response in
             let currencyName = currencyNameResponse.first(where: { $0.key.lowercased() == response.baseAsset.lowercased() })?.value ?? "?"
-            return response.makeModel(name: currencyName)
+            return response.makeModel(name: currencyName, isFavorite: checkModelAsFavorite(response.symbol) )
         }
         
         return models.compactMap { $0 }
+    }
+    
+    func getFavorites() {
+        favorites = userDefaultsManager.getFavorites()
+    }
+    
+    private func checkModelAsFavorite(_ symbol: String) -> Bool {
+        return favorites.contains { $0.symbol == symbol }
     }
     
     @MainActor
@@ -74,6 +85,15 @@ class ViewModel: ObservableObject {
         await getExchangeRate()
         viewState = .loadingState
     }
+    
+    func didChangeFavorite(model: CryptoCurrencyModel, isFavorite: Bool, index: Int) {
+        models[index].isFavorite = isFavorite
+        viewState = .contentState(models: models)
+        userDefaultsManager.updateFavorites(model: model)
+        getFavorites()
+    }
+    
+    
 }
 
 extension ViewModel {
