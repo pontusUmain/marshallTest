@@ -10,7 +10,7 @@ import SwiftUI
 struct FavoritesListCell: View {
     
     let model: CryptoCurrencyModel
-    let exchange: CurrentCurrency
+    let exchange: Currency
     let isDarkCell: Bool
     let didPressRemove: () -> ()
     

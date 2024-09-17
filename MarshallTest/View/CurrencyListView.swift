@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  CurrencyListView.swift
 //  MarshallTest
 //
 //  Created by Pontus Croneld on 2024-09-13.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct CurrencyListView: View {
     
     @StateObject var viewModel = ViewModel()
     @State var presentFavorites: Bool = false
@@ -40,6 +40,8 @@ struct ContentView: View {
         }
     }
     
+    /// View to be shown when something unexpected happened with the fetch.
+    /// - Parameter message: Error message to be shown,  fetch failed or fetch returned empty array
     private func emptyState(_ message: String) -> some View {
         VStack {
             Text(message)
@@ -58,11 +60,12 @@ struct ContentView: View {
         }
     }
     
+    /// Round button to trigger a sheet showing the favorite cryptos as saved in UserDefaults. Is only shown if the user has marked cryptos as favorites.
     private func favoritesButton() -> some View {
         Button(action: {
             presentFavorites = true
         }) {
-            Image(systemName: "heart.fill")
+            Image(systemName: Constants.Image.heartFill)
                 .accessibilityLabel(Constants.Accessibility.seeFavorites)
                 .padding(25)
                 .background(.white)
@@ -106,5 +109,5 @@ struct ContentView: View {
 
 
 #Preview {
-    ContentView(viewModel: ViewModel())
+    CurrencyListView(viewModel: ViewModel())
 }

@@ -8,6 +8,7 @@
 import Foundation
 
 extension NetworkService {
+    /// Throwing errors in NetworkService
     enum NetworkError: Error {
         case fetchFailed
         case invalidUrl

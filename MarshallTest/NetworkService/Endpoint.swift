@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// Endpoints used in the NetworkService
+/// Can be expanded for baseUrl and queries
 enum Endpoint {
     case cryptoApi
     case exchangeApi

@@ -10,7 +10,7 @@ import SwiftUI
 extension CryptoCurrencyListCell {
     enum Style {
         case placeholder(darkCell: Bool)
-        case content(model: CryptoCurrencyModel, darkCell: Bool, exchange: CurrentCurrency)
+        case content(model: CryptoCurrencyModel, darkCell: Bool, exchange: Currency)
         
         var isDarkCell: Bool {
             switch self {

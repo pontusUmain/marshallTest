@@ -7,10 +7,11 @@
 
 import SwiftUI
 
+/// View to display list of cryptos marked as favorites
 struct FavoritesListView: View {
     @Environment(\.dismiss) var dismiss
     @State var models: [CryptoCurrencyModel]
-    let exchange: CurrentCurrency
+    let exchange: Currency
     let updateFavorites: (CryptoCurrencyModel) -> ()
     
     var body: some View {
@@ -23,6 +24,8 @@ struct FavoritesListView: View {
         }
     }
     
+    /// User presses remove button on a list cell
+    /// - Parameter index: Using the index to update the correct model. UpdateFavorites triggers a completion that handles the update in the UserDefaultsManager via the ViewModel. Models.remove handles the local view. If the models are empty the view should be dismissed as there are no favorite cryptos to show.
     private func removeFavorite(_ index: Int) {
         updateFavorites(models[index])
         models.remove(at: index)

@@ -53,4 +53,10 @@ struct Constants {
         static let seeFavorites = "See favorites"
         static let dismiss = "Dismiss"
     }
+    
+    struct Image {
+        static let heart = "heart"
+        static let heartFill = "heart.fill"
+        static let crypto = "crypto"
+    }
 }

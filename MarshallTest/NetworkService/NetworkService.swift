@@ -9,12 +9,16 @@ import Foundation
 import Combine
 
 final class NetworkService {
+   
     private var subscriptions = Set<AnyCancellable>()
-    
     private let decoder = JSONDecoder()
         
     // MARK: AsyncAwait
     
+    /// Private generic function to load data using async/await
+    /// Throws url error if the URL is invalid and fetch fail if status code is not 200 OK
+    /// - Parameter endpoint: Enum defined in NetworkService/Endpoint
+    /// - Returns: Generic data typ
     private func load<T: Decodable>(endpoint: Endpoint) async throws -> T {
         guard let url = endpoint.url else {
             throw NetworkError.invalidUrl
@@ -26,9 +30,13 @@ final class NetworkService {
         return try decoder.decode(T.self, from: data)
     }
     
-    func loadCurrencies() async throws -> [CryptoCurrencyResponse] {
+    /// Function accessible to the viewModel to use the generic async await fetch
+    /// Expects an array of CryptoCurrencyResponseItem from the cryptoApi
+    /// Throws fetchFailed error if load function fails to decode as expected
+    /// - Returns: Array of CryptoCurrencyResponseItem, to be typecase as CryptoCurrencyModel down the line
+    func loadCurrencies() async throws -> [CryptoCurrencyResponseItem] {
         do {
-            let currencyResponse: [CryptoCurrencyResponse] = try await load(endpoint: .cryptoApi)
+            let currencyResponse: [CryptoCurrencyResponseItem] = try await load(endpoint: .cryptoApi)
             return currencyResponse
         } catch {
             print(error.localizedDescription)
@@ -36,6 +44,10 @@ final class NetworkService {
         }
     }
     
+    /// Function accessible to the viewModel to use the generic async await fetch
+    /// Expects an ExchangeResult from the exchangeApi
+    /// Throws fetchFailed error if load function fails to decode as expected
+    /// - Returns: Optional exchange rate Double to compare SEK to USD
     func loadExchangeRate() async throws -> Double? {
         do {
             let exchangeRateResponse: ExchangeResult = try await load(endpoint: .exchangeApi)
@@ -49,6 +61,9 @@ final class NetworkService {
     
     // MARK: JSON
     
+    /// Private generic function to load JSON from a bundled source
+    /// - Parameter resource: The name of the bundled JSON file
+    /// - Returns: The same type as requested when function called
     private func loadJson<T: Decodable>(resource: String) -> T? {
         if let url = Bundle.main.url(forResource: resource, withExtension: "json") {
             do {
@@ -65,13 +80,16 @@ final class NetworkService {
         return nil
     }
     
+    /// Function accessible to the viewModel to load values from the cryptocurrencies json file
+    /// - Returns: A dictionary with string keys and values
     func loadCryptoNamesFromJson() -> [String: String] {
         let cryptoNameResponse: [String: String]? = loadJson(resource: Constants.Urls.cryptoNameJson)
         return cryptoNameResponse ?? [:]
     }
     
     // MARK: Combine - unused
-    private func load(endpoint: Endpoint) -> AnyPublisher<[CryptoCurrency], Never> {
+    /// Functions to fetch CryptoCurrencyResponseItem from the cryptoApi using combine. Ended up using the Async/Await solution instead but left as a remainder for how I would approach the soltuion using combine
+    private func load(endpoint: Endpoint) -> AnyPublisher<[CryptoCurrencyResponseItem], Never> {
         guard let url = endpoint.url else {
             return Just([])
                 .eraseToAnyPublisher()
@@ -80,7 +98,7 @@ final class NetworkService {
             .shared
             .dataTaskPublisher(for: url)
             .map { $0.data }
-            .decode(type: [CryptoCurrency].self, decoder: decoder)
+            .decode(type: [CryptoCurrencyResponseItem].self, decoder: decoder)
             .catch { _ in return Just([]) }
             .eraseToAnyPublisher()
         

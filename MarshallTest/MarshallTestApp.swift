@@ -11,7 +11,7 @@ import SwiftUI
 struct MarshallTestApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CurrencyListView()
         }
     }
 }

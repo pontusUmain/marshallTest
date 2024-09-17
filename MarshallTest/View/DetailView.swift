@@ -10,12 +10,12 @@ import SwiftUI
 struct DetailView: View {
     
     let model: CryptoCurrencyModel
-    let currentCurrency: CurrentCurrency
+    let currentCurrency: Currency
     let didChangeFavorite: (Bool) -> Void
     
     @State var localFavorite: Bool
     
-    init(model: CryptoCurrencyModel, currentCurrency: CurrentCurrency, didChangeFavorite: @escaping (Bool) -> Void) {
+    init(model: CryptoCurrencyModel, currentCurrency: Currency, didChangeFavorite: @escaping (Bool) -> Void) {
         self.model = model
         self.currentCurrency = currentCurrency
         self.didChangeFavorite = didChangeFavorite
@@ -24,7 +24,7 @@ struct DetailView: View {
     
     var body: some View {
         VStack {
-            Image("crypto")
+            Image(Constants.Image.crypto)
                 .resizable()
                 .scaledToFit()
                 .padding(.bottom, 20)
@@ -46,7 +46,7 @@ struct DetailView: View {
             Button(action: {
                 localFavorite.toggle()
             }) {
-                Image(systemName: localFavorite ? "heart.fill" : "heart")
+                Image(systemName: localFavorite ? Constants.Image.heartFill : Constants.Image.heart)
             }
             .accessibilityLabel(localFavorite ? Constants.Accessibility.removeAsFavorite : Constants.Accessibility.markAsFavorite)
         }
