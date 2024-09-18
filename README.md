@@ -8,9 +8,9 @@ UserDefaults
 SwiftUI
 
 ## Sources used: 
-Crypto currencies: https://api.wazirx.com/sapi/v1/tickers/24hr
-Exchange rates: https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json
-Names of crypto currencies: https://github.com/crypti/cryptocurrencies/blob/master/cryptocurrencies.json, downloaded as JSON and saved in Bundle
+- Crypto currencies: https://api.wazirx.com/sapi/v1/tickers/24hr
+- Exchange rates: https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json
+- Names of crypto currencies: https://github.com/crypti/cryptocurrencies/blob/master/cryptocurrencies.json, downloaded as JSON and saved in Bundle
 
 ## What's next
 Next steps if I would spend more time developing this app would include:
