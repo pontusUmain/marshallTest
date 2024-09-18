@@ -1,6 +1,6 @@
 # Description
 
-Code assignment for Mashall, crypto currency app
+Code assignment for Mashall, crypto currency app. Time spent, approx 16 hours
 
 ## Tools used
 Async/Await for API calls (Honorable mention to Combine included)
